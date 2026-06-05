@@ -1,4 +1,4 @@
-```md
+
 # Synthetic Event Schema
 
 This project uses a synthetic event-level dataset designed to represent behavioral analytics data from a global ecommerce product.
