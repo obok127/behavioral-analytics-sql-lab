@@ -51,6 +51,8 @@ measurement-reliability-sql/
 └── case_studies/
     └── natural_search_tracking_drop.md
 
+
+
 ## Data note
 
 All schemas, tables, and examples in this repository are synthetic and anonymized. They are designed to represent common behavioral analytics patterns in global digital products without exposing any confidential company data.
