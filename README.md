@@ -64,6 +64,18 @@ Each scenario folder follows a consistent investigation pattern:
 ```text
 scenario-name/
 ├── README.md
+├── schema.md
+├── mock_data/
+│   ├── generate_mock_events.py
+│   ├── raw_events.csv
+│   └── scenario_notes.md
+└── setup/
+│   ├── 00_create_raw_events.sql
+│   ├── 01_load_mock_data_postgresql.sql
+│   ├── 02_create_staging_events.sql
+│   ├── 03_create_dimensions.sql
+│   ├── 04_create_fact_events.sql
+│   └── 05_validate_setup.sql
 ├── postgresql/
 │   ├── 01_*.sql
 │   ├── 02_*.sql
