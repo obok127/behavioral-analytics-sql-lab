@@ -4,7 +4,7 @@
 ![Focus](https://img.shields.io/badge/Focus-Data%20Quality%20%26%20Root%20Cause%20Analysis-brightgreen)
 ![Status](https://img.shields.io/badge/Status-In%20Progress-yellow)
 
-A portfolio-style SQL practice repository focused on **measurement reliability**, **behavioral event data quality**, and **root-cause analysis for analytics tracking issues**.
+SQL practice repository focused on **measurement reliability**, **behavioral event data quality**, and **root-cause analysis for analytics tracking issues**.
 
 This repository is not a collection of basic SQL drills. Each scenario is designed as a realistic analytics engineering / product data investigation, where the goal is to diagnose why a metric changed, why tracking is inconsistent, or where a data pipeline failed.
 
