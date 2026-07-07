@@ -88,24 +88,6 @@ scenario-name/
     └── 10_*_summary.sql
 ```
 
-The campaign-channel scenario also includes mock data generation and setup scripts:
-
-```text
-campaign-channel-cid-spike-root-cause/
-├── schema.md
-├── mock_data/
-│   ├── generate_mock_events.py
-│   ├── raw_events.csv
-│   └── scenario_notes.md
-└── setup/
-    ├── 00_create_raw_events.sql
-    ├── 01_load_mock_data_postgresql.sql
-    ├── 02_create_staging_events.sql
-    ├── 03_create_dimensions.sql
-    ├── 04_create_fact_events.sql
-    └── 05_validate_setup.sql
-```
-
 ---
 
 ## Scenario catalog
