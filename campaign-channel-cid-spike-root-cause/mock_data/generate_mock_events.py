@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 generate_mock_events.py
 
@@ -793,8 +794,13 @@ def validate_rows(rows: list[dict], *, require_qa_truth: bool) -> None:
             root = payload["qa_truth"]["root_cause_label"]
             root_causes[root] = root_causes.get(root, 0) + 1
 
-    baseline_paid_share = period_channel_counts.get(("baseline", "paid_search"), 0) / period_counts.get("baseline", 1)
-    spike_paid_share = period_channel_counts.get(("spike", "paid_search"), 0) / period_counts.get("spike", 1)
+    required_periods = {"baseline", "spike", "post"}
+    missing_periods = sorted(required_periods - set(period_counts))
+    if missing_periods:
+        raise ValueError(f"Generated dataset is missing required periods: {missing_periods}")
+
+    baseline_paid_share = period_channel_counts.get(("baseline", "paid_search"), 0) / period_counts["baseline"]
+    spike_paid_share = period_channel_counts.get(("spike", "paid_search"), 0) / period_counts["spike"]
     if spike_paid_share <= baseline_paid_share:
         raise ValueError("Expected paid_search share to increase during spike period")
 
@@ -893,10 +899,34 @@ def print_summary(rows: list[dict], output_path: Path, *, include_qa_truth: bool
             print(f"  {root_cause:38s} {count:6,d}")
 
 
+def validate_args(args: argparse.Namespace) -> None:
+    positive_int_fields = [
+        "baseline_days",
+        "spike_days",
+        "post_days",
+        "baseline_sessions_per_day",
+        "spike_sessions_per_day",
+        "post_sessions_per_day",
+    ]
+
+    for field_name in positive_int_fields:
+        value = getattr(args, field_name)
+        if value <= 0:
+            raise ValueError(f"{field_name} must be a positive integer, got {value}")
+
+    try:
+        datetime.strptime(args.start_date, "%Y-%m-%d")
+    except ValueError as exc:
+        raise ValueError("start_date must use YYYY-MM-DD format") from exc
+
+
 def main() -> None:
     args = parse_args()
+    validate_args(args)
+
     rows = generate_rows(args)
     validate_rows(rows, require_qa_truth=not args.hide_qa_truth)
+
     output_path = Path(args.output).resolve()
     write_csv(rows, output_path)
     print_summary(rows, output_path, include_qa_truth=not args.hide_qa_truth)
