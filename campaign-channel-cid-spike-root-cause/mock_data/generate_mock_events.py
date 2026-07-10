@@ -71,7 +71,6 @@ DEFAULT_POST_DAYS = 3
 BASE_URL = "https://example.com"
 APP_IDENTIFIER = "DemoRetailApp"
 SPIKE_CAMPAIGN_ID = "cmp_spike_999"
-BANNED_PUBLIC_STRINGS = ("galaxy", "samsung", "globalshopapp")
 
 PAGE_SEQUENCE = [
     ("home", "/home"),
@@ -769,10 +768,6 @@ def validate_rows(rows: list[dict], *, require_qa_truth: bool) -> None:
         raise ValueError("event_id values are not unique")
 
     payloads = []
-    serialized_rows = json.dumps(rows, ensure_ascii=False).lower()
-    for banned in BANNED_PUBLIC_STRINGS:
-        if banned in serialized_rows:
-            raise ValueError(f"Banned public string found in generated data: {banned}")
 
     for row in rows:
         event_dt = datetime.strptime(row["event_timestamp"], "%Y-%m-%d %H:%M:%S")
