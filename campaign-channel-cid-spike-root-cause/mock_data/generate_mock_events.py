@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 generate_mock_events.py
 
@@ -72,7 +73,7 @@ SPIKE_CAMPAIGN_ID = "cmp_spike_999"
 PAGE_SEQUENCE = [
     ("home", "/home"),
     ("landing", "/landing"),
-    ("product_detail", "/product/galaxy-z"),
+    ("product_detail", "/product/product-alpha"),
     ("cart", "/cart"),
     ("checkout", "/checkout"),
     ("order_confirmation", "/order-confirmation"),
@@ -89,7 +90,7 @@ EVENT_BY_PAGE = {
 
 REFERRERS = {
     "direct": "",
-    "organic_search": "https://search.example.com/search?q=galaxy",
+    "organic_search": "https://search.example.com/search?q=product-alpha",
     "referral": "https://partner.example.com/deals",
     "paid_social": "https://social.example.com/ad/click",
     "paid_search": "https://ad.example.com/click",
@@ -107,8 +108,8 @@ USER_AGENTS = {
         "Mozilla/5.0 (Linux; Android 14) Chrome/126.0 Mobile Safari/537.36",
     ],
     "app_webview": [
-        "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/126.0 Mobile Safari/537.36 GlobalShopApp/1.0.143",
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 GlobalShopApp/1.0.143",
+        "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/126.0 Mobile Safari/537.36 DemoRetailApp/1.0.143",
+        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 DemoRetailApp/1.0.143",
     ],
 }
 
