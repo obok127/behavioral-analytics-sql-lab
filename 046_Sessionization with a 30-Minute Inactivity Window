@@ -1,0 +1,49 @@
+WITH ordered AS (
+    SELECT
+        user_id,
+        event_id,
+        event_time,
+        LAG(event_time) OVER (
+            PARTITION BY user_id
+            ORDER BY event_time, event_id
+        ) AS previous_event_time
+    FROM events
+    WHERE user_id IS NOT NULL
+      AND event_time >= '2026-07-01'
+      AND event_time <  '2026-08-01'
+),
+
+marked AS (
+    SELECT
+        user_id,
+        event_id,
+        event_time,
+        previous_event_time,
+        CASE
+            WHEN previous_event_time IS NULL
+              OR event_time > DATE_ADD(previous_event_time, INTERVAL 30 MINUTE)
+            THEN 1
+            ELSE 0
+        END AS new_session
+    FROM ordered
+),
+
+sessionized AS (
+    SELECT
+        user_id,
+        event_id,
+        event_time,
+        SUM(new_session) OVER (
+            PARTITION BY user_id
+            ORDER BY event_time, event_id
+            ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+        ) AS derived_session_no
+    FROM marked
+)
+
+SELECT
+    user_id,
+    MAX(derived_session_no) AS derived_sessions
+FROM sessionized
+GROUP BY user_id
+ORDER BY user_id;
