@@ -1,0 +1,65 @@
+WITH period_metrics AS (
+    SELECT
+        treatment_group,
+        CASE
+            WHEN date < DATE '2026-07-01' THEN 'pre'
+            ELSE 'post'
+        END AS period,
+        AVG(conversion_rate) AS avg_conversion_rate
+    FROM market_metrics
+    WHERE date BETWEEN DATE '2026-06-01'
+                   AND DATE '2026-07-31'
+    GROUP BY
+        treatment_group,
+        CASE
+            WHEN date < DATE '2026-07-01' THEN 'pre'
+            ELSE 'post'
+        END
+),
+
+group_metrics AS (
+    SELECT
+        treatment_group,
+        MAX(CASE
+            WHEN period = 'pre'
+            THEN avg_conversion_rate
+        END) AS pre_conversion_rate,
+
+        MAX(CASE
+            WHEN period = 'post'
+            THEN avg_conversion_rate
+        END) AS post_conversion_rate
+    FROM period_metrics
+    GROUP BY treatment_group
+),
+
+changes AS (
+    SELECT
+        treatment_group,
+        pre_conversion_rate,
+        post_conversion_rate,
+        post_conversion_rate - pre_conversion_rate AS change
+    FROM group_metrics
+)
+
+SELECT
+    MAX(CASE
+        WHEN treatment_group = 1
+        THEN change
+    END) AS treatment_change,
+
+    MAX(CASE
+        WHEN treatment_group = 0
+        THEN change
+    END) AS control_change,
+
+    MAX(CASE
+        WHEN treatment_group = 1
+        THEN change
+    END)
+    -
+    MAX(CASE
+        WHEN treatment_group = 0
+        THEN change
+    END) AS difference_in_differences
+FROM changes;
